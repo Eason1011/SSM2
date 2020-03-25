@@ -259,8 +259,9 @@ function deleteStudent(id){
 	
 	
 	<!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
-    <div id="main" style="width: 600px;height:400px;background-color: #f0f;"></div>
-
+    <div id="mainChart" style="width: 600px;height:440px;float:left;"></div>
+    <div id="main" style="width: 600px;height:200px;float:right;background-color:#cccccc;"></div>
+    <div id="main2" style="width: 600px;height:220px;float:right;background-color:#cccccc;margin-top:20px;"></div>
 </body>
 
 
@@ -290,6 +291,126 @@ var tableToExcel = (function () {
 })()
 </script>
 <script>
+//使用ajax加载数据
+$.ajax({
+    method: 'post',
+    url: '${pageContext.request.contextPath}/pie',
+    dataType: 'json',
+    success: function (data) {//data格式
+        initChat(data);
+    }
+});
 
+function initChat(data) {
+    var myChart = echarts.init(document.getElementById('mainChart'));
+    option = {
+        backgroundColor: '#cccccc',
+        color: ["#D53A35", "#296294"],
+        title: {
+            text: '各学院疫情上报情况',
+            subtext: '数据纯属虚构',
+            x: 'center'
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: formatData(data).xAxData
+        },
+        series: [{
+            name: '各学院人数',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '60%'],
+            color: ['#ffff00', '#ff00ff','#CEB21C','#0F0F08','#D61517','#2C15C9','#71D6FF','#95989D','#1FB258','#83986F','#98A712','#986421','#DE4B4B'],
+            data: formatData(data).serData,
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }]
+    };
+    myChart.setOption(option, true);
+};
+
+function formatData(data) {
+    var xAxData = [];
+    var serData = [];
+
+    for (var i = 0; i < data.length; i++) {
+        xAxData.push(data[i].name || "");
+        serData.push({
+            name: data[i].name,
+            value: data[i].value || 0
+        });
+    }
+
+    return {
+        xAxData: xAxData,
+        serData: serData
+    };
+};
+</script>
+<script>
+	var myChart = echarts.init(document.getElementById('main'));
+	// 指定图表的配置项和数据
+    myChart.setOption({
+    	title: {
+            text: '老师学生上报情况',
+            subtext: '数据纯属虚构'
+        },
+            series : [
+                {
+                	color: ['#ff0000','#749f83', ],
+                    name: '老师学生上报情况',
+                    type: 'pie',    // 设置图表类型为饼图
+                    radius: '55%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
+                    data:[          // 数据数组，name 为数据项名称，value 为数据项值
+                        {value:24, name:'老师'},
+                        {value:50, name:'学生'}
+                    ]
+                }
+            ]
+        })
+</script>
+<script>
+	var myChart = echarts.init(document.getElementById('main2'));
+	// 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '疫情防控情况',
+            subtext: '纯属虚构'
+        },
+        tooltip: {
+            
+        },
+        legend: {
+            data: ['否', '是']
+        },
+        xAxis: {
+        	  data: ["是否今天从外地返校", "体温是否正常"]
+        }  ,
+        yAxis: {},
+        series: [
+            {
+                name: '否',
+                type: 'bar',
+                data: [36,20],
+            },
+            {
+                name: '是',
+                type: 'bar',
+                data: [38,54],
+            }
+        ]
+    };
+ // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
 </script>
 </html>
