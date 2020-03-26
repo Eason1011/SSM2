@@ -65,7 +65,7 @@ function deleteStudent(id){
 		$.post("deleteStudent",{"id":id},
 			  	function(data){
 				  if(data=="OK"){
-					  alert("删除学生疫情信息成功！");
+					  alert("删除疫情信息成功！");
 					  window.location.reload();
 				  }else{
 					  alert("删除学生疫情信息失败！");
@@ -149,7 +149,7 @@ function deleteStudent(id){
 </div>
 
 <!-- 按钮触发模态框 -->
-  <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addStudent">添加</button>
+ <!--<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addStudent">添加</button>-->
 <!-- 模态框（Modal） -->
 <div class="modal fade" id="addStudent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">

@@ -11,72 +11,6 @@
 <link rel="stylesheet" href="plug-in/system/css/style.css" />
 <link rel="stylesheet" href="plug-in/bootstrap-3.3.7-dist/css/bootstrap.css" />
 </head>
-<script type="text/javascript">
-function saveStudent(){	
-	alert($('#addStudentForm').serialize());
-  $.post("insertStudent",$('#addStudentForm').serialize(),
-  	function(data){
-	  if(data=="OK"){
-		  alert("疫情上报成功！");
-		  window.location.reload();
-		  clearFormData();
-	  }else{
-		  alert("操作失败！");
-	  }
-  	}
-  );
-}
-function updateStudent(id){	
-	$.ajax({url: "getStudentById", 
-		type:"get",
-		data:{"id":id},
-		success: function(data){
-       		//数据回显
-       		$("#addStudentForm #id").val(data.id);
-       		$("#addStudentForm #clazzId").val(data.clazzId);
-       		$("#addStudentForm #code").val(data.code);
-       		$("#addStudentForm #name").val(data.name);
-       		$("#addStudentForm #sex").val(data.sex);
-       		$("#addStudentForm #birthday").val(data.birthday);
-       		$("#addStudentForm #nation").val(data.nation);       		
-    	}
-	});
-}
-function clearFormData(){
-	$("#addStudentForm #id").val("");
-	$("#addStudentForm #clazzId").val("");
-	$("#addStudentForm #code").val("");
-	$("#addStudentForm #name").val("");
-	$("#addStudentForm #sex").val("");
-	$("#addStudentForm #birthday").val("");
-	$("#addStudentForm #nation").val("");
-}
-function clearQueryForm(){	
-	$("#queryForm #clazzId").val("");
-	$("#queryForm #code").val("");
-	$("#queryForm #name").val("");
-	$("#queryForm #sex").val("");	
-	$("#queryForm #nation").val("");
-}
-function deleteStudent(id){	
-	var r = confirm("你确定删除吗");
-	if (r == true) {
-		$.post("deleteStudent",{"id":id},
-			  	function(data){
-				  if(data=="OK"){
-					  alert("删除学生成功！");
-					  window.location.reload();
-				  }else{
-					  alert("删除学生失败！");
-					  
-				  }
-			  	}
-			  );
-	} else {
-	}
-  
-}
-</script>
 <body>
 	<div class="s_top">
 		<div class="s_top_left">
@@ -97,9 +31,9 @@ function deleteStudent(id){
 
 	<div class="s_cen">
 		<div class="s_cen_top">
-			<img src="plug-in/system/images/student.png" style="height:100%;width:30%;" alt="">
+			<img src="plug-in/system/images/student.jpg" style="height:100%;width:30%;" alt="">
 <!-- 按钮触发模态框 -->
-<!--  <button style="display:inline-block;" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addStudent">添加</button>-->
+  <button style="display:inline-block;" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addStudent">添加</button>
 <!-- 模态框（Modal） -->
 <div class="modal fade" id="addStudent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -120,7 +54,15 @@ function deleteStudent(id){
 								</select>
 			       		</div>
 			       		<div class="form-group">
-			       			<label for="">学号</label>
+			       			<label for="">身份</label>
+			       			<select name="identity" class="form-control" id="identity">
+			       				<c:forEach var="item" items="${identityList}">
+			       					<option value="${item.itemCode}">${item.itemName}</option>
+			       				</c:forEach>
+			       			</select>
+			       		</div>
+			       		<div class="form-group">
+			       			<label for="">学号/工号</label>
 			       			<input type="text" name="code" class="form-control" id="code">
 			       		</div>
 			       		<div class="form-group">
@@ -133,15 +75,14 @@ function deleteStudent(id){
 			       				<c:forEach var="item" items="${sexList}">
 			       					<option value="${item.itemCode}">${item.itemName}</option>
 			       				</c:forEach>
-			       			</select>
-			       			
+			       			</select>		
 			       		</div>
 			       		
 			       		<div class="form-group">
 			       			<label for="">体温是否正常</label>
 			       			<select name="nation" class="form-control" id="nation">
-			       				<c:forEach var="group" items="${nationList}">
-			       					<option value="${group.itemCode}">${group.itemName}</option>
+			       				<c:forEach var="item" items="${nationList}">
+			       					<option value="${item.itemCode}">${item.itemName}</option>
 			       				</c:forEach>
 			       			</select>
 			       		</div>
@@ -150,11 +91,9 @@ function deleteStudent(id){
 			       			<input type="reset" value="重置" class="btn btn-danger">
 			       		</div>
 			       	</form>
-
-
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
+        </div>
+    </div>
 </div>
 
 <div class="alert alert-danger alert-dismissible" role="alert" style="display:inline-block;float:right;margin-top:20px;">
